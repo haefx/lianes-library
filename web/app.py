@@ -87,9 +87,10 @@ def inject_styles() -> None:
             margin-bottom: 0.2rem !important;
         }
 
-        [data-testid="stMain"] .stMarkdown p,
-        [data-testid="stMain"] .stMarkdown span,
-        [data-testid="stMain"] .stMarkdown div,
+        [data-testid="stMain"] p,
+        [data-testid="stMain"] span,
+        [data-testid="stMain"] label,
+        [data-testid="stMain"] li,
         [data-testid="stMain"] [data-testid="stCaptionContainer"],
         [data-testid="stMain"] [data-testid="stWidgetLabel"] {
             color: #334155 !important;
@@ -118,17 +119,30 @@ def inject_styles() -> None:
             background: #1d4ed8 !important;
         }
 
+        .stButton>button *,
+        [data-testid="stSidebar"] .stButton>button * {
+            color: #ffffff !important;
+        }
+
         button[role="tab"] {
-            background: rgba(37, 99, 235, 0.12) !important;
+            background: #e0e7ff !important;
             color: #0f172a !important;
-            border-color: rgba(148,163,184,0.35) !important;
+            border-color: #c7d2fe !important;
             margin: 0 0.25rem 0.5rem 0 !important;
+        }
+
+        button[role="tab"] * {
+            color: #0f172a !important;
         }
 
         button[role="tab"][aria-selected="true"] {
             background: #2563eb !important;
             color: #ffffff !important;
             border-color: transparent !important;
+        }
+
+        button[role="tab"][aria-selected="true"] * {
+            color: #ffffff !important;
         }
 
         .stDataFrame,
@@ -173,8 +187,15 @@ def inject_styles() -> None:
         }
 
         [data-testid="stMetricLabel"],
-        [data-testid="stMetricValue"] {
+        [data-testid="stMetricLabel"] *,
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricValue"] * {
             color: #102a43 !important;
+        }
+
+        ::selection {
+            background: #bfdbfe;
+            color: #0f172a;
         }
         </style>
         """,
