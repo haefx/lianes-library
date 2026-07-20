@@ -22,8 +22,8 @@ if MYSQL_URL:
         DB_PASSWORD = parsed.password or DB_PASSWORD
         DB_NAME = parsed.path.lstrip("/") or DB_NAME
 
-if not DB_NAME:
-    DB_NAME = "default"
+if not DB_NAME or DB_NAME.lower() == "default":
+    DB_NAME = "lianes_library"
 
 DB_CONFIG = {
     "host": DB_HOST,
@@ -76,8 +76,8 @@ def split_statements(sql_text: str) -> list[str]:
 
 def initialize_schema() -> None:
     sql_text = load_sql_file(SCHEMA_FILE)
-    sql_text = sql_text.replace("CREATE DATABASE IF NOT EXISTS lianes_library", f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
-    sql_text = sql_text.replace("USE lianes_library;", f"USE {DB_NAME};")
+    sql_text = sql_text.replace("CREATE DATABASE IF NOT EXISTS lianes_library", f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}`")
+    sql_text = sql_text.replace("USE lianes_library;", f"USE `{DB_NAME}`;")
 
     statements = split_statements(sql_text)
     connection = get_connection(database=None)
