@@ -23,104 +23,105 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        [data-testid="stAppViewContainer"] {
-            background: #f3f6fb;
-            color: #102a43;
-            font-family: Inter, sans-serif;
+        html, body, [data-testid="stAppViewContainer"], [data-testid="stMainContent"] {
+            background: #f5f7fb !important;
+            color: #102a43 !important;
+            font-family: Inter, sans-serif !important;
+        }
+
+        .css-18e3th9, .css-1d391kg, .css-1y4p8pa {
+            background: transparent !important;
+        }
+
+        .stApp {
+            background: #f5f7fb !important;
+        }
+
+        .css-1v0mbdj.e1fqkh3o4 {
+            background: #0f172a !important;
         }
 
         [data-testid="stSidebar"] {
-            background: #0f172a;
-            color: #f8fafc;
-            border-right: 1px solid rgba(148,163,184,0.16);
-        }
-
-        [data-testid="stSidebar"] .css-1d391kg,
-        [data-testid="stSidebar"] .css-1v3fvcr {
-            background: transparent;
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border-right: 1px solid rgba(148,163,184,0.18) !important;
         }
 
         [data-testid="stSidebar"] h2,
         [data-testid="stSidebar"] h3,
         [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] p {
-            color: #e2e8f0;
+        [data-testid="stSidebar"] p,
+        [data-testid="stSidebar"] span {
+            color: #e2e8f0 !important;
         }
 
+        .stButton>button,
         [data-testid="stSidebar"] button {
+            border-radius: 1rem !important;
             background: #2563eb !important;
-            color: white !important;
+            color: #ffffff !important;
             border: none !important;
-            box-shadow: none !important;
+            padding: 0.85rem 1.3rem !important;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18) !important;
         }
 
-        .css-1d391kg {
-            padding: 1.5rem 1.5rem 2rem;
-        }
-
-        .stMarkdown h1 {
-            color: #0f172a;
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .stMarkdown h2,
-        .stMarkdown h3,
-        .stMarkdown h4 {
-            color: #102a43;
-            font-weight: 700;
-        }
-
-        .stAlert {
-            border-radius: 1.25rem;
-            border: 1px solid rgba(14, 165, 233, 0.15);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-        }
-
-        .stButton>button {
-            border-radius: 1rem;
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 0.85rem 1.4rem;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.2);
-        }
-
-        .stButton>button:hover {
-            background: #1d4ed8;
+        .stButton>button:hover,
+        [data-testid="stSidebar"] button:hover {
+            background: #1d4ed8 !important;
         }
 
         .stButton>button:focus {
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+            outline: none !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18) !important;
         }
 
-        .element-container,
-        .stDataFrame,
+        .stMarkdown h1,
+        .stMarkdown h2,
+        .stMarkdown h3,
+        .stMarkdown h4 {
+            color: #0f172a !important;
+        }
+
+        .stMarkdown h1 {
+            font-size: 2.6rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 0.25rem !important;
+        }
+
+        .stMarkdown p,
+        .stMarkdown span,
+        .stMarkdown div {
+            color: #334155 !important;
+        }
+
+        .css-1d391kg .stTabs,
         .stTabs,
+        .stDataFrame,
         .stMetric {
             background: #ffffff !important;
             border: 1px solid rgba(148,163,184,0.18) !important;
-            border-radius: 1.5rem !important;
+            border-radius: 1.25rem !important;
             box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06) !important;
-            padding: 1.5rem !important;
         }
 
         .stDataFrame table {
-            border-radius: 1rem;
-            overflow: hidden;
+            border-radius: 1rem !important;
+            overflow: hidden !important;
         }
 
         .stDataFrame th {
-            background: #0f172a;
-            color: #f8fafc;
-            font-weight: 700;
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            font-weight: 700 !important;
         }
 
         .stDataFrame td {
-            background: #ffffff;
-            color: #102a43;
+            background: #ffffff !important;
+            color: #102a43 !important;
+        }
+
+        .stDataFrame td:nth-child(odd) {
+            background: #f8fafc !important;
         }
 
         .stTabs button {
@@ -133,12 +134,29 @@ def inject_styles() -> None:
 
         .stTabs button[aria-selected="true"] {
             background: #2563eb !important;
-            color: white !important;
+            color: #ffffff !important;
             border-color: transparent !important;
         }
 
-        .streamlit-expanderHeader {
-            font-weight: 700 !important;
+        .stAlert {
+            border-radius: 1rem !important;
+            border: 1px solid rgba(203,213,225,0.45) !important;
+            background: #f8fafc !important;
+        }
+
+        .stTextInput>div>div>input,
+        .stTextArea>div>div>textarea,
+        .stSelectbox>div>div>div>div {
+            background: #f8fafc !important;
+            color: #102a43 !important;
+            border: 1px solid rgba(148,163,184,0.25) !important;
+        }
+
+        .stMetric {
+            padding: 1.3rem !important;
+        }
+
+        .stMetric>div>div>div {
             color: #102a43 !important;
         }
         </style>
