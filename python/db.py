@@ -43,11 +43,11 @@ SQL_DIR = ROOT_DIR / "sql"
 SCHEMA_FILE = SQL_DIR / "import.sql"
 
 
-def get_connection(database: Optional[str] = None) -> mysql.connector.connection.MySQLConnection:
+def get_connection(database: Optional[str] = DB_NAME) -> mysql.connector.connection.MySQLConnection:
     config = DB_CONFIG.copy()
-    if database is None and "database" in config:
+    if database is None:
         config.pop("database")
-    elif database is not None:
+    else:
         config["database"] = database
     return mysql.connector.connect(**config)
 
@@ -172,7 +172,11 @@ def schema_exists() -> bool:
         connection.close()
 
 
-def execute_statement(sql: str, params: Optional[Iterable[Any]] = None, database: Optional[str] = None) -> int:
+def execute_statement(
+    sql: str,
+    params: Optional[Iterable[Any]] = None,
+    database: Optional[str] = DB_NAME,
+) -> int:
     connection = get_connection(database)
     cursor = connection.cursor()
 
@@ -188,7 +192,11 @@ def execute_statement(sql: str, params: Optional[Iterable[Any]] = None, database
         connection.close()
 
 
-def execute_many(sql: str, parameter_rows: Iterable[Iterable[Any]], database: Optional[str] = None) -> int:
+def execute_many(
+    sql: str,
+    parameter_rows: Iterable[Iterable[Any]],
+    database: Optional[str] = DB_NAME,
+) -> int:
     connection = get_connection(database)
     cursor = connection.cursor()
 
@@ -204,7 +212,11 @@ def execute_many(sql: str, parameter_rows: Iterable[Iterable[Any]], database: Op
         connection.close()
 
 
-def query_dataframe(sql: str, params: Optional[Iterable[Any]] = None, database: Optional[str] = None) -> pd.DataFrame:
+def query_dataframe(
+    sql: str,
+    params: Optional[Iterable[Any]] = None,
+    database: Optional[str] = DB_NAME,
+) -> pd.DataFrame:
     connection = get_connection(database)
     try:
         return pd.read_sql(sql, connection, params=params)

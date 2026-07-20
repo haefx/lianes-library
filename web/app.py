@@ -23,7 +23,7 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        html, body, [data-testid="stAppViewContainer"], [data-testid="stMainContent"] {
+        html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
             background: #eef2ff !important;
             color: #0f172a !important;
             font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
@@ -61,11 +61,11 @@ def inject_styles() -> None:
             background: #1d4ed8 !important;
         }
 
-        [data-testid="stMainContent"] {
+        [data-testid="stMain"] {
             padding: 1.5rem 2rem 2rem !important;
         }
 
-        [data-testid="stMainContent"] > div:first-child {
+        [data-testid="stMainBlockContainer"] {
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -87,23 +87,20 @@ def inject_styles() -> None:
             margin-bottom: 0.2rem !important;
         }
 
-        .stMarkdown p,
-        .stMarkdown span,
-        .stMarkdown div {
+        [data-testid="stMain"] .stMarkdown p,
+        [data-testid="stMain"] .stMarkdown span,
+        [data-testid="stMain"] .stMarkdown div,
+        [data-testid="stMain"] [data-testid="stCaptionContainer"],
+        [data-testid="stMain"] [data-testid="stWidgetLabel"] {
             color: #334155 !important;
         }
 
-        .stAlert {
+        [data-testid="stAlert"] {
             border-radius: 1rem !important;
-            border: 1px solid rgba(248, 113, 113, 0.35) !important;
-            background: #fee2e2 !important;
-            color: #7f1d1d !important;
         }
 
-        .st-success .stAlert {
-            background: #d1fae5 !important;
-            border-color: rgba(34,197,94,0.35) !important;
-            color: #065f46 !important;
+        [data-testid="stAlert"] * {
+            color: inherit !important;
         }
 
         .stButton>button,
@@ -175,7 +172,8 @@ def inject_styles() -> None:
             padding: 1.5rem !important;
         }
 
-        .stMetric>div>div>div {
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricValue"] {
             color: #102a43 !important;
         }
         </style>
