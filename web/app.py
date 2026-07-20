@@ -15,6 +15,7 @@ from python.db import (
     initialize_schema,
     query_dataframe,
     schema_exists,
+    seed_sample_data_if_empty,
     test_connection,
 )
 
@@ -28,8 +29,8 @@ def inject_styles() -> None:
             --slate: #475569;
             --muted: #64748b;
             --line: #e2e8f0;
-            --surface: #ffffff;
-            --canvas: #f6f8fc;
+            --surface: #f8fafc;
+            --canvas: #e9eef6;
             --primary: #4f46e5;
             --primary-dark: #4338ca;
         }
@@ -40,13 +41,13 @@ def inject_styles() -> None:
 
         [data-testid="stAppViewContainer"] {
             background:
-                radial-gradient(circle at 86% 4%, rgba(99, 102, 241, 0.10), transparent 28rem),
+                radial-gradient(circle at 86% 4%, rgba(99, 102, 241, 0.12), transparent 28rem),
                 var(--canvas) !important;
             color: var(--navy) !important;
         }
 
         [data-testid="stHeader"] {
-            background: rgba(246, 248, 252, 0.82) !important;
+            background: rgba(233, 238, 246, 0.84) !important;
             backdrop-filter: blur(16px);
         }
 
@@ -159,7 +160,7 @@ def inject_styles() -> None:
             padding: 0.4rem;
             border: 1px solid var(--line);
             border-radius: 1rem;
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(248, 250, 252, 0.94);
             box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
         }
 
@@ -814,6 +815,12 @@ def main():
                     st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
             database_help()
             return
+
+        try:
+            if seed_sample_data_if_empty():
+                st.toast("Beispieldaten wurden angelegt.", icon="✅")
+        except Exception as err:
+            st.warning(f"Beispieldaten konnten nicht angelegt werden: {err}")
 
         tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Einstellungen"])
 
