@@ -12,6 +12,7 @@ from python.db import (
     DB_CONFIG,
     SAFE_CONFIG,
     execute_statement,
+    initialize_schema,
     query_dataframe,
     test_connection,
 )
@@ -519,6 +520,14 @@ def main():
         with tabs[4]:
             database_help()
     else:
+        st.warning("Die Datenbankverbindung ist zwar grundsätzlich möglich, aber das Schema wurde noch nicht initialisiert.")
+        if st.button("Schema initialisieren"):
+            try:
+                initialize_schema()
+                st.success("Datenbank-Schema wurde erstellt. Bitte Seite neu laden.")
+            except Exception as err:
+                st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
+
         database_help()
 
 
