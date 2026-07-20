@@ -14,6 +14,7 @@ from python.db import (
     execute_statement,
     initialize_schema,
     query_dataframe,
+    schema_exists,
     test_connection,
 )
 
@@ -507,6 +508,16 @@ def main():
         st.error(err)
 
     if connected:
+        missing_schema = not schema_exists()
+        if missing_schema:
+            st.warning("Das Datenbankschema ist noch nicht angelegt. Bitte initialisiere es, bevor du weiterarbeitest.")
+            if st.button("Schema initialisieren"):
+                try:
+                    initialize_schema()
+                    st.success("Datenbank-Schema wurde erstellt. Bitte Seite neu laden.")
+                except Exception as err:
+                    st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
+
         tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Datenbank"])
 
         with tabs[0]:
@@ -520,14 +531,9 @@ def main():
         with tabs[4]:
             database_help()
     else:
-        st.warning("Die Datenbankverbindung ist zwar grundsätzlich möglich, aber das Schema wurde noch nicht initialisiert.")
-        if st.button("Schema initialisieren"):
-            try:
-                initialize_schema()
-                st.success("Datenbank-Schema wurde erstellt. Bitte Seite neu laden.")
-            except Exception as err:
-                st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
-
+        st.error(
+            "Datenbank nicht erreichbar. Prüfe, ob MySQL läuft und die Umgebungsvariablen korrekt gesetzt sind."
+        )
         database_help()
 
 

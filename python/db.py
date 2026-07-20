@@ -107,6 +107,21 @@ def test_connection() -> bool:
         connection.close()
 
 
+def schema_exists() -> bool:
+    connection = get_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.execute(
+            "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = %s AND table_name IN ('books', 'borrowers', 'loans')",
+            (DB_NAME,),
+        )
+        result = cursor.fetchone()
+        return bool(result and result[0] >= 3)
+    finally:
+        cursor.close()
+        connection.close()
+
+
 def execute_statement(sql: str, params: Optional[Iterable[Any]] = None, database: Optional[str] = None) -> int:
     connection = get_connection(database)
     cursor = connection.cursor()
