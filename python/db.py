@@ -76,23 +76,51 @@ def split_statements(sql_text: str) -> list[str]:
     return statements
 
 
-def initialize_schema() -> None:
+def prepare_schema_statements(db_exists: bool) -> list[str]:
     sql_text = load_sql_file(SCHEMA_FILE)
-    sql_text = sql_text.replace("CREATE DATABASE IF NOT EXISTS lianes_library", f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}`")
-    sql_text = sql_text.replace("USE lianes_library;", f"USE `{DB_NAME}`;")
-
     statements = split_statements(sql_text)
-    connection = get_connection(database=None)
-    cursor = connection.cursor()
 
+    if db_exists:
+        filtered = [
+            stmt for stmt in statements
+            if not stmt.strip().upper().startswith("CREATE DATABASE")
+            and not stmt.strip().upper().startswith("USE ")
+        ]
+        return filtered
+
+    replaced = [
+        stmt.replace("CREATE DATABASE IF NOT EXISTS lianes_library", f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}`")
+            .replace("USE lianes_library;", f"USE `{DB_NAME}`;")
+        for stmt in statements
+    ]
+    return replaced
+
+
+def initialize_schema() -> None:
+    db_exists = database_exists()
+    if db_exists:
+        connection = get_connection(database=DB_NAME)
+        statements = prepare_schema_statements(db_exists=True)
+    else:
+        connection = get_connection(database=None)
+        statements = prepare_schema_statements(db_exists=False)
+
+    cursor = connection.cursor()
     try:
         for statement in statements:
             cursor.execute(statement)
         connection.commit()
     except mysql.connector.Error as err:
         connection.rollback()
+        error_msg = str(err).lower()
+        if db_exists:
+            raise RuntimeError(
+                "Schema-Initialisierung fehlgeschlagen. Der Benutzer kann die vorhandene Datenbank nicht verwenden oder hat keine Rechte zum Erstellen von Tabellen. "
+                f"Original: {err}"
+            ) from err
         raise RuntimeError(
-            "Schema-Initialisierung fehlgeschlagen. Prüfe, ob der angegebene MySQL-Benutzer Rechte zum Erstellen oder Verwenden der Datenbank hat. "
+            "Schema-Initialisierung fehlgeschlagen. Der Benutzer kann die Datenbank nicht erstellen oder verwenden. "
+            "Falls die Datenbank bereits existiert, setze die Verbindungsdaten so, dass du darauf zugreifen darfst. "
             f"Original: {err}"
         ) from err
     finally:
