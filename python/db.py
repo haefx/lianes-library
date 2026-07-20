@@ -40,9 +40,7 @@ SAFE_CONFIG = {
 
 def get_connection(database: Optional[str] = None) -> mysql.connector.connection.MySQLConnection:
     config = DB_CONFIG.copy()
-    if database is None:
-        config.pop("database", None)
-    else:
+    if database is not None:
         config["database"] = database
     return mysql.connector.connect(**config)
 
