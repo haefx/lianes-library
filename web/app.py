@@ -23,179 +23,283 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
-            background: #eef2ff !important;
-            color: #0f172a !important;
-            font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+        :root {
+            --navy: #0f172a;
+            --slate: #475569;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --surface: #ffffff;
+            --canvas: #f6f8fc;
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
         }
 
-        [data-testid="stSidebar"] {
-            background: #0f172a !important;
-            color: #e2e8f0 !important;
-            border-right: 1px solid rgba(148,163,184,0.18) !important;
-            padding: 1.25rem 1rem 2rem !important;
+        html, body, .stApp {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
         }
 
-        [data-testid="stSidebar"] * {
-            color: #e2e8f0 !important;
+        [data-testid="stAppViewContainer"] {
+            background:
+                radial-gradient(circle at 86% 4%, rgba(99, 102, 241, 0.10), transparent 28rem),
+                var(--canvas) !important;
+            color: var(--navy) !important;
         }
 
-        [data-testid="stSidebar"] .stTextInput>div>div>input,
-        [data-testid="stSidebar"] .stTextArea>div>div>textarea,
-        [data-testid="stSidebar"] .stSelectbox>div>div>div>div {
-            background: rgba(255,255,255,0.08) !important;
-            border: 1px solid rgba(226,232,240,0.15) !important;
-            color: #e2e8f0 !important;
-        }
-
-        [data-testid="stSidebar"] .stButton>button {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border-radius: 1rem !important;
-            border: none !important;
-            padding: 0.8rem 1.25rem !important;
-            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18) !important;
-        }
-
-        [data-testid="stSidebar"] .stButton>button:hover {
-            background: #1d4ed8 !important;
+        [data-testid="stHeader"] {
+            background: rgba(246, 248, 252, 0.82) !important;
+            backdrop-filter: blur(16px);
         }
 
         [data-testid="stMain"] {
-            padding: 1.5rem 2rem 2rem !important;
-        }
-
-        [data-testid="stMainBlockContainer"] {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stApp, .main, .block-container, .css-1v0mbdj.e1fqkh3o4 {
             background: transparent !important;
         }
 
-        .stMarkdown h1,
-        .stMarkdown h2,
-        .stMarkdown h3,
-        .stMarkdown h4 {
-            color: #102a43 !important;
+        [data-testid="stMainBlockContainer"] {
+            max-width: 1280px;
+            padding: 3.5rem 2.25rem 4rem !important;
         }
 
-        .stMarkdown h1 {
-            font-size: 2.5rem !important;
-            font-weight: 800 !important;
-            margin-bottom: 0.2rem !important;
+        [data-testid="stMain"] h1,
+        [data-testid="stMain"] h2,
+        [data-testid="stMain"] h3,
+        [data-testid="stMain"] h4 {
+            color: var(--navy) !important;
+            letter-spacing: -0.025em;
         }
 
         [data-testid="stMain"] p,
         [data-testid="stMain"] span,
         [data-testid="stMain"] label,
         [data-testid="stMain"] li,
-        [data-testid="stMain"] [data-testid="stCaptionContainer"],
-        [data-testid="stMain"] [data-testid="stWidgetLabel"] {
-            color: #334155 !important;
+        [data-testid="stWidgetLabel"] {
+            color: var(--slate) !important;
         }
 
-        [data-testid="stAlert"] {
-            border-radius: 1rem !important;
+        .dashboard-hero {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
         }
 
-        [data-testid="stAlert"] * {
-            color: inherit !important;
+        .dashboard-logo {
+            display: grid;
+            place-items: center;
+            width: 3.25rem;
+            height: 3.25rem;
+            flex: 0 0 3.25rem;
+            border-radius: 1rem;
+            color: #fff;
+            font-size: 1.45rem;
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            box-shadow: 0 14px 30px rgba(79, 70, 229, 0.24);
         }
 
-        .stButton>button,
+        .dashboard-hero h1 {
+            margin: 0 !important;
+            font-size: clamp(1.8rem, 3vw, 2.45rem) !important;
+            font-weight: 760 !important;
+        }
+
+        .dashboard-hero p {
+            margin: 0.25rem 0 0 !important;
+            color: var(--muted) !important;
+        }
+
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #111827 0%, #0f172a 100%) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        [data-testid="stSidebarContent"] {
+            padding: 2rem 1.25rem !important;
+        }
+
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3,
+        [data-testid="stSidebar"] p,
+        [data-testid="stSidebar"] span,
+        [data-testid="stSidebar"] label {
+            color: #e5e7eb !important;
+        }
+
+        .sidebar-brand {
+            padding: 0.25rem 0 1.35rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .sidebar-brand strong {
+            display: block;
+            color: #fff;
+            font-size: 1.05rem;
+        }
+
+        .sidebar-brand small,
+        .db-status small {
+            color: #94a3b8;
+        }
+
+        .db-status {
+            padding: 1rem;
+            margin: 0.5rem 0 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .db-status strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #f8fafc;
+        }
+
+        [data-testid="stTabs"] {
+            padding: 0.4rem;
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+        }
+
+        [data-baseweb="tab-list"] {
+            gap: 0.3rem;
+            padding: 0.1rem;
+        }
+
         button[role="tab"] {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border: 1px solid transparent !important;
-            border-radius: 999px !important;
-            padding: 0.8rem 1.25rem !important;
-            transition: background 0.2s ease !important;
-        }
-
-        .stButton>button:hover,
-        button[role="tab"]:hover {
-            background: #1d4ed8 !important;
-        }
-
-        .stButton>button *,
-        [data-testid="stSidebar"] .stButton>button * {
-            color: #ffffff !important;
-        }
-
-        button[role="tab"] {
-            background: #e0e7ff !important;
-            color: #0f172a !important;
-            border-color: #c7d2fe !important;
-            margin: 0 0.25rem 0.5rem 0 !important;
+            min-height: 2.65rem !important;
+            padding: 0.65rem 1rem !important;
+            border-radius: 0.7rem !important;
+            background: transparent !important;
+            border: 0 !important;
         }
 
         button[role="tab"] * {
-            color: #0f172a !important;
+            color: var(--slate) !important;
+            font-weight: 600 !important;
+        }
+
+        button[role="tab"]:hover {
+            background: #eef2ff !important;
         }
 
         button[role="tab"][aria-selected="true"] {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border-color: transparent !important;
+            background: var(--navy) !important;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.14);
         }
 
         button[role="tab"][aria-selected="true"] * {
             color: #ffffff !important;
         }
 
-        .stDataFrame,
-        .stMetric,
-        .stTabs,
-        .css-10trblm,
-        .css-1n76uvr {
-            background: #ffffff !important;
-            border: 1px solid rgba(148,163,184,0.16) !important;
-            border-radius: 1rem !important;
-            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06) !important;
+        [data-testid="stMetric"] {
+            position: relative;
+            min-height: 8.5rem;
+            padding: 1.35rem 1.4rem !important;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            background: var(--surface);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
         }
 
-        .stDataFrame table {
-            border-radius: 1rem !important;
-            overflow: hidden !important;
+        [data-testid="stMetric"]::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(#6366f1, #818cf8);
         }
 
-        .stDataFrame th {
-            background: #0f172a !important;
-            color: #f8fafc !important;
-        }
-
-        .stDataFrame td {
-            color: #102a43 !important;
-        }
-
-        .stDataFrame td:nth-child(odd) {
-            background: #f8fafc !important;
-        }
-
-        .stTextInput>div>div>input,
-        .stTextArea>div>div>textarea,
-        .stSelectbox>div>div>div>div {
-            background: #f8fafc !important;
-            color: #102a43 !important;
-            border: 1px solid rgba(148,163,184,0.25) !important;
-        }
-
-        .stMetric {
-            padding: 1.5rem !important;
-        }
-
-        [data-testid="stMetricLabel"],
         [data-testid="stMetricLabel"] *,
-        [data-testid="stMetricValue"],
-        [data-testid="stMetricValue"] * {
-            color: #102a43 !important;
+        [data-testid="stMetricLabel"] {
+            color: var(--muted) !important;
+            font-weight: 600 !important;
+        }
+
+        [data-testid="stMetricValue"] *,
+        [data-testid="stMetricValue"] {
+            color: var(--navy) !important;
+            font-weight: 740 !important;
+        }
+
+        [data-testid="stExpander"],
+        [data-testid="stForm"],
+        .stDataFrame {
+            border: 1px solid var(--line) !important;
+            border-radius: 1rem !important;
+            background: var(--surface) !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045) !important;
+        }
+
+        [data-testid="stAlert"] {
+            border-radius: 0.85rem !important;
+            border-width: 1px !important;
+        }
+
+        [data-testid="stAlert"] * {
+            color: inherit !important;
+        }
+
+        .stTextInput input,
+        .stTextArea textarea,
+        .stSelectbox [data-baseweb="select"] > div,
+        [data-testid="stDateInput"] input {
+            min-height: 2.8rem;
+            color: var(--navy) !important;
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            border-radius: 0.7rem !important;
+        }
+
+        .stButton > button,
+        [data-testid="stFormSubmitButton"] > button {
+            min-height: 2.75rem;
+            padding: 0.65rem 1.15rem !important;
+            color: #ffffff !important;
+            border: 0 !important;
+            border-radius: 0.75rem !important;
+            background: linear-gradient(135deg, #6366f1, var(--primary-dark)) !important;
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+            transition: transform 150ms ease, box-shadow 150ms ease !important;
+        }
+
+        .stButton > button:hover,
+        [data-testid="stFormSubmitButton"] > button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 11px 24px rgba(79, 70, 229, 0.28);
+        }
+
+        .stButton > button *,
+        [data-testid="stFormSubmitButton"] > button * {
+            color: #ffffff !important;
+            font-weight: 650 !important;
+        }
+
+        [data-testid="stDataFrame"] {
+            overflow: hidden;
+            border-radius: 0.9rem;
+        }
+
+        hr {
+            border-color: var(--line) !important;
         }
 
         ::selection {
-            background: #bfdbfe;
-            color: #0f172a;
+            color: var(--navy);
+            background: #c7d2fe;
+        }
+
+        @media (max-width: 768px) {
+            [data-testid="stMainBlockContainer"] {
+                padding: 2rem 1rem 3rem !important;
+            }
+
+            .dashboard-hero {
+                align-items: flex-start;
+            }
         }
         </style>
         """,
@@ -279,7 +383,7 @@ def show_overview():
 
     with st.container():
         st.subheader("Schnelle Übersichten")
-        tabs = st.tabs(["Verfügbare Bücher", "Offene Ausleihen", "Letzte Historie"])
+        tabs = st.tabs(["Verfügbare Bücher", "Offene Ausleihen", "Letzte Aktivitäten"])
 
         with tabs[0]:
             available = load_available_books()
@@ -638,12 +742,39 @@ def main():
 
     inject_styles()
 
-    st.title("Liane's Library")
-    st.caption("Moderne Bibliotheksverwaltung für Bücher, Personen und Ausleihen.")
+    st.markdown(
+        """
+        <div class="dashboard-hero">
+            <div class="dashboard-logo">◫</div>
+            <div>
+                <h1>Liane's Library</h1>
+                <p>Bibliothek, Personen und Ausleihen zentral verwalten</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    st.sidebar.header("Datenbank")
-    st.sidebar.write(SAFE_CONFIG)
-    if st.sidebar.button("Verbindung testen"):
+    st.sidebar.markdown(
+        """
+        <div class="sidebar-brand">
+            <strong>Liane's Library</strong>
+            <small>Administration Dashboard</small>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.sidebar.subheader("Datenbank")
+    st.sidebar.markdown(
+        f"""
+        <div class="db-status">
+            <strong>{SAFE_CONFIG['database']}</strong>
+            <small>{SAFE_CONFIG['host']}:{SAFE_CONFIG['port']} · {SAFE_CONFIG['user']}</small>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.sidebar.button("Verbindung testen", use_container_width=True):
         try:
             if test_connection():
                 st.sidebar.success("Datenbankverbindung erfolgreich")
@@ -684,7 +815,7 @@ def main():
             database_help()
             return
 
-        tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Datenbank"])
+        tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Einstellungen"])
 
         with tabs[0]:
             show_overview()
