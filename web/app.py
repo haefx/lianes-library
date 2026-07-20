@@ -24,68 +24,67 @@ def inject_styles() -> None:
         """
         <style>
         html, body, [data-testid="stAppViewContainer"], [data-testid="stMainContent"] {
-            background: #f5f7fb !important;
-            color: #102a43 !important;
-            font-family: Inter, sans-serif !important;
-        }
-
-        .css-18e3th9, .css-1d391kg, .css-1y4p8pa {
-            background: transparent !important;
-        }
-
-        .stApp {
-            background: #f5f7fb !important;
-        }
-
-        .css-1v0mbdj.e1fqkh3o4 {
-            background: #0f172a !important;
+            background: #eef2ff !important;
+            color: #0f172a !important;
+            font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
         }
 
         [data-testid="stSidebar"] {
             background: #0f172a !important;
-            color: #f8fafc !important;
+            color: #e2e8f0 !important;
             border-right: 1px solid rgba(148,163,184,0.18) !important;
+            padding: 1.25rem 1rem 2rem !important;
         }
 
-        [data-testid="stSidebar"] h2,
-        [data-testid="stSidebar"] h3,
-        [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] p,
-        [data-testid="stSidebar"] span {
+        [data-testid="stSidebar"] * {
             color: #e2e8f0 !important;
         }
 
-        .stButton>button,
-        [data-testid="stSidebar"] button {
-            border-radius: 1rem !important;
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border: none !important;
-            padding: 0.85rem 1.3rem !important;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18) !important;
+        [data-testid="stSidebar"] .stTextInput>div>div>input,
+        [data-testid="stSidebar"] .stTextArea>div>div>textarea,
+        [data-testid="stSidebar"] .stSelectbox>div>div>div>div {
+            background: rgba(255,255,255,0.08) !important;
+            border: 1px solid rgba(226,232,240,0.15) !important;
+            color: #e2e8f0 !important;
         }
 
-        .stButton>button:hover,
-        [data-testid="stSidebar"] button:hover {
+        [data-testid="stSidebar"] .stButton>button {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-radius: 1rem !important;
+            border: none !important;
+            padding: 0.8rem 1.25rem !important;
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18) !important;
+        }
+
+        [data-testid="stSidebar"] .stButton>button:hover {
             background: #1d4ed8 !important;
         }
 
-        .stButton>button:focus {
-            outline: none !important;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18) !important;
+        [data-testid="stMainContent"] {
+            padding: 1.5rem 2rem 2rem !important;
+        }
+
+        [data-testid="stMainContent"] > div:first-child {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stApp, .main, .block-container, .css-1v0mbdj.e1fqkh3o4 {
+            background: transparent !important;
         }
 
         .stMarkdown h1,
         .stMarkdown h2,
         .stMarkdown h3,
         .stMarkdown h4 {
-            color: #0f172a !important;
+            color: #102a43 !important;
         }
 
         .stMarkdown h1 {
-            font-size: 2.6rem !important;
+            font-size: 2.5rem !important;
             font-weight: 800 !important;
-            margin-bottom: 0.25rem !important;
+            margin-bottom: 0.2rem !important;
         }
 
         .stMarkdown p,
@@ -94,14 +93,56 @@ def inject_styles() -> None:
             color: #334155 !important;
         }
 
-        .css-1d391kg .stTabs,
-        .stTabs,
+        .stAlert {
+            border-radius: 1rem !important;
+            border: 1px solid rgba(248, 113, 113, 0.35) !important;
+            background: #fee2e2 !important;
+            color: #7f1d1d !important;
+        }
+
+        .st-success .stAlert {
+            background: #d1fae5 !important;
+            border-color: rgba(34,197,94,0.35) !important;
+            color: #065f46 !important;
+        }
+
+        .stButton>button,
+        button[role="tab"] {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border: 1px solid transparent !important;
+            border-radius: 999px !important;
+            padding: 0.8rem 1.25rem !important;
+            transition: background 0.2s ease !important;
+        }
+
+        .stButton>button:hover,
+        button[role="tab"]:hover {
+            background: #1d4ed8 !important;
+        }
+
+        button[role="tab"] {
+            background: rgba(37, 99, 235, 0.12) !important;
+            color: #0f172a !important;
+            border-color: rgba(148,163,184,0.35) !important;
+            margin: 0 0.25rem 0.5rem 0 !important;
+        }
+
+        button[role="tab"][aria-selected="true"] {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
+        }
+
         .stDataFrame,
-        .stMetric {
+        .stMetric,
+        .stTabs,
+        .css-10trblm,
+        .css-1n76uvr {
             background: #ffffff !important;
-            border: 1px solid rgba(148,163,184,0.18) !important;
-            border-radius: 1.25rem !important;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06) !important;
+            border: 1px solid rgba(148,163,184,0.16) !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06) !important;
         }
 
         .stDataFrame table {
@@ -112,35 +153,13 @@ def inject_styles() -> None:
         .stDataFrame th {
             background: #0f172a !important;
             color: #f8fafc !important;
-            font-weight: 700 !important;
         }
 
         .stDataFrame td {
-            background: #ffffff !important;
             color: #102a43 !important;
         }
 
         .stDataFrame td:nth-child(odd) {
-            background: #f8fafc !important;
-        }
-
-        .stTabs button {
-            border-radius: 999px !important;
-            padding: 0.75rem 1.2rem !important;
-            background: #e2e8f0 !important;
-            color: #102a43 !important;
-            border: 1px solid rgba(148,163,184,0.35) !important;
-        }
-
-        .stTabs button[aria-selected="true"] {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border-color: transparent !important;
-        }
-
-        .stAlert {
-            border-radius: 1rem !important;
-            border: 1px solid rgba(203,213,225,0.45) !important;
             background: #f8fafc !important;
         }
 
@@ -153,7 +172,7 @@ def inject_styles() -> None:
         }
 
         .stMetric {
-            padding: 1.3rem !important;
+            padding: 1.5rem !important;
         }
 
         .stMetric>div>div>div {
@@ -632,6 +651,8 @@ def main():
                     st.success("Datenbank-Schema wurde erstellt. Bitte Seite neu laden.")
                 except Exception as err:
                     st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
+            database_help()
+            return
 
         tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Datenbank"])
 
