@@ -49,9 +49,10 @@ def get_connection(database: Optional[str] = None) -> mysql.connector.connection
 
 def test_connection() -> bool:
     connection = get_connection()
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     try:
         cursor.execute("SELECT 1")
+        cursor.fetchone()
         return True
     finally:
         cursor.close()
