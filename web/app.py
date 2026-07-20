@@ -629,17 +629,28 @@ def main():
             if test_connection():
                 st.sidebar.success("Datenbankverbindung erfolgreich")
         except Exception as err:
-            st.sidebar.error(f"Verbindung fehlgeschlagen: {err}")
+            message = str(err)
+            st.sidebar.error(f"Verbindung fehlgeschlagen: {message}")
+            if "1045" in message or "Access denied" in message:
+                st.sidebar.error(
+                    "Authentifizierungsfehler: Prüfe MYSQL_USER, MYSQL_PASSWORD und Benutzerrechte."
+                )
 
     try:
         test_connection()
         connected = True
     except Exception as err:
         connected = False
+        message = str(err)
         st.error(
             "Datenbank nicht erreichbar. Prüfe, ob MySQL läuft und die Umgebungsvariablen korrekt gesetzt sind."
         )
-        st.error(err)
+        st.error(message)
+        if "1044" in message or "1045" in message or "Access denied" in message:
+            st.error(
+                "Der angegebene MySQL-Benutzer hat keine ausreichenden Rechte. "
+                "Verwende einen Benutzer mit Zugriff auf die Datenbank oder korrigiere die Rechte."
+            )
 
     if connected:
         missing_schema = not schema_exists()

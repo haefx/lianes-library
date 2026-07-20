@@ -98,7 +98,7 @@ def initialize_schema() -> None:
 
 
 def test_connection() -> bool:
-    connection = get_connection()
+    connection = get_connection(database=None)
     cursor = connection.cursor(buffered=True)
     try:
         cursor.execute("SELECT 1")
@@ -110,7 +110,7 @@ def test_connection() -> bool:
 
 
 def schema_exists() -> bool:
-    connection = get_connection()
+    connection = get_connection(database=None)
     cursor = connection.cursor()
     try:
         cursor.execute(
@@ -119,6 +119,8 @@ def schema_exists() -> bool:
         )
         result = cursor.fetchone()
         return bool(result and result[0] >= 3)
+    except mysql.connector.Error:
+        return False
     finally:
         cursor.close()
         connection.close()
