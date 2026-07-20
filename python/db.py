@@ -89,9 +89,12 @@ def initialize_schema() -> None:
         for statement in statements:
             cursor.execute(statement)
         connection.commit()
-    except Exception:
+    except mysql.connector.Error as err:
         connection.rollback()
-        raise
+        raise RuntimeError(
+            "Schema-Initialisierung fehlgeschlagen. Prüfe, ob der angegebene MySQL-Benutzer Rechte zum Erstellen oder Verwenden der Datenbank hat. "
+            f"Original: {err}"
+        ) from err
     finally:
         cursor.close()
         connection.close()
@@ -104,6 +107,21 @@ def test_connection() -> bool:
         cursor.execute("SELECT 1")
         cursor.fetchone()
         return True
+    finally:
+        cursor.close()
+        connection.close()
+
+
+def database_exists() -> bool:
+    connection = get_connection(database=None)
+    cursor = connection.cursor()
+    try:
+        cursor.execute(
+            "SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = %s",
+            (DB_NAME,),
+        )
+        result = cursor.fetchone()
+        return bool(result and result[0] == 1)
     finally:
         cursor.close()
         connection.close()
