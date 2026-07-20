@@ -24,14 +24,20 @@ def inject_styles() -> None:
         """
         <style>
         [data-testid="stAppViewContainer"] {
-            background: #eef4fb;
-            color: #0f172a;
+            background: #f3f6fb;
+            color: #102a43;
             font-family: Inter, sans-serif;
         }
 
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #122244 0%, #17315f 100%);
+            background: #0f172a;
             color: #f8fafc;
+            border-right: 1px solid rgba(148,163,184,0.16);
+        }
+
+        [data-testid="stSidebar"] .css-1d391kg,
+        [data-testid="stSidebar"] .css-1v3fvcr {
+            background: transparent;
         }
 
         [data-testid="stSidebar"] h2,
@@ -41,90 +47,99 @@ def inject_styles() -> None:
             color: #e2e8f0;
         }
 
-        [data-testid="stSidebar"] .stButton>button {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            box-shadow: none;
+        [data-testid="stSidebar"] button {
+            background: #2563eb !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
-        [data-testid="stAppViewContainer"] .main {
-            padding: 1.6rem 2rem 2rem;
-        }
-
-        .css-1d391kg,
-        .css-1oe6wyx {
-            background: transparent;
+        .css-1d391kg {
+            padding: 1.5rem 1.5rem 2rem;
         }
 
         .stMarkdown h1 {
             color: #0f172a;
-            letter-spacing: -0.05em;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
 
         .stMarkdown h2,
         .stMarkdown h3,
         .stMarkdown h4 {
             color: #102a43;
+            font-weight: 700;
         }
 
         .stAlert {
-            border-radius: 18px;
-        }
-
-        .css-ffhzg2 {
-            color: #0f172a;
-        }
-
-        .css-1d391kg .stTabs {
-            margin-bottom: 1rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(14, 165, 233, 0.15);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
         }
 
         .stButton>button {
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             background: #2563eb;
             color: white;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: none;
+            padding: 0.85rem 1.4rem;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.2);
         }
 
         .stButton>button:hover {
             background: #1d4ed8;
         }
 
-        .element-container {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
-            padding: 1.3rem;
-            margin-bottom: 1.4rem;
+        .stButton>button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+        }
+
+        .element-container,
+        .stDataFrame,
+        .stTabs,
+        .stMetric {
+            background: #ffffff !important;
+            border: 1px solid rgba(148,163,184,0.18) !important;
+            border-radius: 1.5rem !important;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06) !important;
+            padding: 1.5rem !important;
         }
 
         .stDataFrame table {
-            border-radius: 18px;
+            border-radius: 1rem;
             overflow: hidden;
         }
 
         .stDataFrame th {
             background: #0f172a;
             color: #f8fafc;
+            font-weight: 700;
         }
 
         .stDataFrame td {
             background: #ffffff;
-            color: #0f172a;
+            color: #102a43;
         }
 
         .stTabs button {
             border-radius: 999px !important;
-            padding: 0.7rem 1.2rem !important;
-            background: #e2e8f0;
-            color: #102a43;
+            padding: 0.75rem 1.2rem !important;
+            background: #e2e8f0 !important;
+            color: #102a43 !important;
+            border: 1px solid rgba(148,163,184,0.35) !important;
         }
 
         .stTabs button[aria-selected="true"] {
             background: #2563eb !important;
             color: white !important;
+            border-color: transparent !important;
+        }
+
+        .streamlit-expanderHeader {
+            font-weight: 700 !important;
+            color: #102a43 !important;
         }
         </style>
         """,
