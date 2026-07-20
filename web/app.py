@@ -23,26 +23,108 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        .stApp {
-            background: #f4f7fb;
+        [data-testid="stAppViewContainer"] {
+            background: #eef4fb;
+            color: #0f172a;
+            font-family: Inter, sans-serif;
+        }
+
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #122244 0%, #17315f 100%);
+            color: #f8fafc;
+        }
+
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3,
+        [data-testid="stSidebar"] label,
+        [data-testid="stSidebar"] p {
+            color: #e2e8f0;
+        }
+
+        [data-testid="stSidebar"] .stButton>button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            box-shadow: none;
+        }
+
+        [data-testid="stAppViewContainer"] .main {
+            padding: 1.6rem 2rem 2rem;
+        }
+
+        .css-1d391kg,
+        .css-1oe6wyx {
+            background: transparent;
+        }
+
+        .stMarkdown h1 {
+            color: #0f172a;
+            letter-spacing: -0.05em;
+        }
+
+        .stMarkdown h2,
+        .stMarkdown h3,
+        .stMarkdown h4 {
+            color: #102a43;
+        }
+
+        .stAlert {
+            border-radius: 18px;
+        }
+
+        .css-ffhzg2 {
             color: #0f172a;
         }
-        .block-container {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
+
+        .css-1d391kg .stTabs {
+            margin-bottom: 1rem;
         }
-        .css-1d391kg {
-            padding: 1rem 1.2rem 0.8rem;
+
+        .stButton>button {
+            border-radius: 0.75rem;
+            background: #2563eb;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.15);
         }
-        .metric-label {
-            color: #475569;
+
+        .stButton>button:hover {
+            background: #1d4ed8;
         }
-        .card {
+
+        .element-container {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 1.1rem;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-            margin-bottom: 1.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+            padding: 1.3rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .stDataFrame table {
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .stDataFrame th {
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .stDataFrame td {
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        .stTabs button {
+            border-radius: 999px !important;
+            padding: 0.7rem 1.2rem !important;
+            background: #e2e8f0;
+            color: #102a43;
+        }
+
+        .stTabs button[aria-selected="true"] {
+            background: #2563eb !important;
+            color: white !important;
         }
         </style>
         """,
