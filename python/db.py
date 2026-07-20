@@ -45,7 +45,9 @@ SCHEMA_FILE = SQL_DIR / "import.sql"
 
 def get_connection(database: Optional[str] = None) -> mysql.connector.connection.MySQLConnection:
     config = DB_CONFIG.copy()
-    if database is not None:
+    if database is None and "database" in config:
+        config.pop("database")
+    elif database is not None:
         config["database"] = database
     return mysql.connector.connect(**config)
 
