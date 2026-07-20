@@ -1,7 +1,12 @@
 import datetime
+import sys
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+sys.path.append(str(ROOT_DIR))
 
 from python.db import (
     DB_CONFIG,
