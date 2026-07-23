@@ -39,8 +39,10 @@ dafür lässt sich jeder Teil noch gut nachvollziehen.
 - `web/app.py`: Streamlit-Anwendung
 - `python/db.py`: Datenbankverbindung und Abfragen
 - `python/create_schema.py`: Hilfsskript, um das Schema manuell neu anzulegen
-- `python/*.ipynb`: Notebooks, in denen ich einzelne SQL-Abfragen und
-  Pandas-Auswertungen ausprobiert habe, bevor sie in `db.py` gewandert sind
+- `python/lianes_library_basic_mysql.ipynb`: ausführliches Test-Notebook
+  (Schema, Beispieldaten, Joins, Integritätstests) aus der Entwicklungsphase
+- `python/crud_grundlagen.ipynb`: kurzes Übungsnotebook für die ersten
+  eigenen CRUD-Abfragen (lesen, anlegen, ändern, löschen) über `db.py`
 - `docs/screenshots/`: Screenshots der Anwendung für diese README
 
 ## Datenmodell
