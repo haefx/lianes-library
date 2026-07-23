@@ -1,18 +1,60 @@
 # Liane's Library
 
-Eine Bibliotheksverwaltung mit Streamlit und MySQL. Für das Production-Deployment
-auf Coolify wird Docker verwendet. Lokal kann die Anwendung zum Lernen in einer
-Conda-Umgebung ausgeführt werden.
+Kleine Bibliotheksverwaltung für private Buchsammlungen – wer hat sich was
+ausgeliehen, was ist noch da, was ist überfällig. Entstanden ist das Projekt
+im Rahmen meiner Weiterbildung als Übung, um Python, SQL und ein einfaches
+Web-Deployment einmal komplett von der Datenbank bis zur Oberfläche selbst
+durchzuziehen.
+
+Die Anwendung ist bewusst schlank gehalten: ein Streamlit-Frontend, eine
+MySQL-Datenbank, dazwischen ein kleines DB-Modul. Kein Framework-Overkill,
+dafür lässt sich jeder Teil noch gut nachvollziehen.
+
+## Was die App kann
+
+- **Dashboard** – Kennzahlen auf einen Blick (aktive Bücher, aktive Personen,
+  offene Ausleihen) plus Schnellübersichten für verfügbare Bücher, offene
+  Ausleihen und die letzten Aktivitäten
+- **Bücher verwalten** – Bücher anlegen, bearbeiten und (statt hart zu
+  löschen) als inaktiv markieren
+- **Personen verwalten** – Ausleiher:innen mit Kontaktdaten und Notiz erfassen
+  und pflegen
+- **Ausleihen** – Bücher gegen Personen ausleihen, Fälligkeitsdatum setzen,
+  Rückgaben erfassen
+- **Einstellungen** – Verbindungsstatus zur Datenbank prüfen und das Schema
+  bei Bedarf neu initialisieren
 
 ## Projektstruktur
 
 - `environment.yml`: lokale Conda-Umgebung
 - `requirements.txt`: gemeinsame Python-Abhängigkeiten für Conda und Docker
 - `docker-compose.yml`: lokale MySQL-Datenbank und optional der komplette Stack
-- `Dockerfile`: unveränderte Production-Laufzeit für Coolify
+- `Dockerfile`: Production-Laufzeit für Coolify
 - `sql/import.sql`: Datenbankschema und Views
+- `sql/testdata.sql`: Beispieldaten für lokale Tests
 - `web/app.py`: Streamlit-Anwendung
 - `python/db.py`: Datenbankverbindung und Abfragen
+- `python/create_schema.py`: Hilfsskript, um das Schema manuell neu anzulegen
+- `python/*.ipynb`: Notebooks, in denen ich einzelne SQL-Abfragen und
+  Pandas-Auswertungen ausprobiert habe, bevor sie in `db.py` gewandert sind
+
+## Datenmodell
+
+Drei Tabellen bilden den Kern ab:
+
+- `books` – Titel, Autor:in, ISBN, Kategorie, Standort, Notizen, `is_active`
+- `borrowers` – Name, Kontaktdaten, Beziehung zur Person, `is_active`
+- `loans` – verknüpft Buch und Person mit Ausleih-, Fällig- und
+  Rückgabedatum
+
+Dazu zwei Views, die in der App direkt abgefragt werden:
+
+- `v_open_loans` – aktuell offene Ausleihen inkl. Buch- und Personendaten
+- `v_loan_overview` – vollständige Ausleihhistorie für die Übersicht
+
+Bücher und Personen werden nie gelöscht, sondern über `is_active`
+deaktiviert – so bleibt die Ausleihhistorie auch nach einer "Löschung"
+nachvollziehbar.
 
 ## Lokal mit Conda üben
 
@@ -112,3 +154,15 @@ eine lokale, von Git ignorierte `.env`-Datei.
 | Lokal mit Conda | Conda | Docker | Lernen, Debugging, Notebooks |
 | Lokal komplett mit Docker | Docker | Docker | Production-nahe Tests |
 | Coolify | Docker | Coolify/MySQL | Production |
+
+## Was ich dabei gelernt habe / offene Punkte
+
+- Streamlit eignet sich gut, um ein CRUD-Interface schnell aufzubauen, ohne
+  sich vorher mit einem separaten Frontend beschäftigen zu müssen
+- Views (`v_open_loans`, `v_loan_overview`) statt komplexer Joins direkt in
+  Python zu pflegen, hält `db.py` deutlich übersichtlicher
+- Soft-Deletes über `is_active` statt echter `DELETE`-Statements, um die
+  Historie nicht zu verlieren
+- Noch offen: eine echte Nutzerverwaltung/Login gibt es aktuell nicht – für
+  den privaten Gebrauch reicht das, für mehrere Haushalte bräuchte es das
+  noch
