@@ -11,3 +11,8 @@ gatherUsageStats = false
 
 [server]
 headless = true
+
+[client]
+# Uncaught exceptions zeigen im Browser nur eine generische Meldung.
+# Vollständige Details (Typ, Message, Traceback) landen weiterhin in der Konsole.
+showErrorDetails = "none"

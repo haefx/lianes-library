@@ -1,4 +1,5 @@
 import datetime
+import logging
 import sys
 from pathlib import Path
 
@@ -18,6 +19,24 @@ from python.db import (
     seed_sample_data_if_empty,
     test_connection,
 )
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger("lianes_library")
+
+
+def show_error(code: str, message: str, error: Exception, display=st.error) -> None:
+    """Zeigt eine allgemeine Meldung + Fehlercode an; die echte Ursache landet nur in der Konsole."""
+    logger.error("[%s] %s", code, message, exc_info=error)
+    display(f"{message} (Fehlercode: {code})")
+
+
+def run_statement(code: str, message: str, sql: str, params=None) -> bool:
+    try:
+        execute_statement(sql, params=params)
+        return True
+    except Exception as error:
+        show_error(code, message, error)
+        return False
 
 
 def inject_styles() -> None:
@@ -312,7 +331,7 @@ def safe_query(sql: str, params=None):
     try:
         return query_dataframe(sql, params=params)
     except Exception as error:
-        st.error(f"Datenbankfehler: {error}")
+        show_error("QUERY-001", "Daten konnten nicht geladen werden.", error)
         return pd.DataFrame()
 
 
@@ -426,7 +445,9 @@ def book_management():
                 if not title or not author:
                     st.warning("Titel und Autor/in sind erforderlich.")
                 else:
-                    execute_statement(
+                    added = run_statement(
+                        "BOOK-001",
+                        "Buch konnte nicht angelegt werden.",
                         """
                         INSERT INTO books (
                             title,
@@ -448,8 +469,9 @@ def book_management():
                             1 if active else 0,
                         ),
                     )
-                    st.success("Buch wurde hinzugefügt.")
-                    st.rerun()
+                    if added:
+                        st.success("Buch wurde hinzugefügt.")
+                        st.rerun()
 
     books = load_books(active_only=False)
     if books.empty:
@@ -479,7 +501,9 @@ def book_management():
             delete = st.form_submit_button("Als inaktiv markieren")
 
             if update:
-                execute_statement(
+                updated = run_statement(
+                    "BOOK-002",
+                    "Buchdaten konnten nicht aktualisiert werden.",
                     """
                     UPDATE books
                     SET title = %s,
@@ -502,16 +526,20 @@ def book_management():
                         selection,
                     ),
                 )
-                st.success("Buchdaten wurden aktualisiert.")
-                st.rerun()
+                if updated:
+                    st.success("Buchdaten wurden aktualisiert.")
+                    st.rerun()
 
             if delete:
-                execute_statement(
+                deactivated = run_statement(
+                    "BOOK-003",
+                    "Buch konnte nicht deaktiviert werden.",
                     "UPDATE books SET is_active = FALSE WHERE book_id = %s",
                     params=(selection,),
                 )
-                st.success("Buch wurde inaktiv gesetzt.")
-                st.rerun()
+                if deactivated:
+                    st.success("Buch wurde inaktiv gesetzt.")
+                    st.rerun()
 
 
 def borrower_management():
@@ -531,7 +559,9 @@ def borrower_management():
                 if not name:
                     st.warning("Name ist erforderlich.")
                 else:
-                    execute_statement(
+                    added = run_statement(
+                        "BORROWER-001",
+                        "Person konnte nicht angelegt werden.",
                         """
                         INSERT INTO borrowers (
                             name,
@@ -551,8 +581,9 @@ def borrower_management():
                             1 if active else 0,
                         ),
                     )
-                    st.success("Person wurde hinzugefügt.")
-                    st.rerun()
+                    if added:
+                        st.success("Person wurde hinzugefügt.")
+                        st.rerun()
 
     borrowers = load_borrowers(active_only=False)
     if borrowers.empty:
@@ -581,7 +612,9 @@ def borrower_management():
             deactivate = st.form_submit_button("Als inaktiv markieren")
 
             if update:
-                execute_statement(
+                updated = run_statement(
+                    "BORROWER-002",
+                    "Personendaten konnten nicht aktualisiert werden.",
                     """
                     UPDATE borrowers
                     SET name = %s,
@@ -602,16 +635,20 @@ def borrower_management():
                         selection,
                     ),
                 )
-                st.success("Personendaten wurden aktualisiert.")
-                st.rerun()
+                if updated:
+                    st.success("Personendaten wurden aktualisiert.")
+                    st.rerun()
 
             if deactivate:
-                execute_statement(
+                deactivated = run_statement(
+                    "BORROWER-003",
+                    "Person konnte nicht deaktiviert werden.",
                     "UPDATE borrowers SET is_active = FALSE WHERE borrower_id = %s",
                     params=(selection,),
                 )
-                st.success("Person wurde inaktiv gesetzt.")
-                st.rerun()
+                if deactivated:
+                    st.success("Person wurde inaktiv gesetzt.")
+                    st.rerun()
 
 
 def loan_management():
@@ -651,7 +688,9 @@ def loan_management():
                 if book_id is None or borrower_id is None:
                     st.warning("Bitte ein Buch und eine Person auswählen.")
                 else:
-                    execute_statement(
+                    added = run_statement(
+                        "LOAN-001",
+                        "Ausleihe konnte nicht angelegt werden.",
                         """
                         INSERT INTO loans (
                             book_id,
@@ -669,8 +708,9 @@ def loan_management():
                             notes if notes else None,
                         ),
                     )
-                    st.success("Ausleihe wurde angelegt.")
-                    st.rerun()
+                    if added:
+                        st.success("Ausleihe wurde angelegt.")
+                        st.rerun()
 
     with st.expander("Offene Ausleihen verwalten"):
         open_loans = load_open_loans()
@@ -687,12 +727,15 @@ def loan_management():
                 ),
             )
             if st.button("Als zurückgegeben markieren"):
-                execute_statement(
+                returned = run_statement(
+                    "LOAN-002",
+                    "Ausleihe konnte nicht als zurückgegeben markiert werden.",
                     "UPDATE loans SET return_date = CURRENT_DATE WHERE loan_id = %s AND return_date IS NULL",
                     params=(loan_choice,),
                 )
-                st.success("Ausleihe wurde als zurückgegeben markiert.")
-                st.rerun()
+                if returned:
+                    st.success("Ausleihe wurde als zurückgegeben markiert.")
+                    st.rerun()
 
 
 def database_help():
@@ -783,9 +826,8 @@ def main():
             if test_connection():
                 st.sidebar.success("Datenbankverbindung erfolgreich")
         except Exception as err:
-            message = str(err)
-            st.sidebar.error(f"Verbindung fehlgeschlagen: {message}")
-            if "1045" in message or "Access denied" in message:
+            show_error("CONN-001", "Verbindung fehlgeschlagen.", err, display=st.sidebar.error)
+            if "1045" in str(err) or "Access denied" in str(err):
                 st.sidebar.error(
                     "Authentifizierungsfehler: Prüfe MYSQL_USER, MYSQL_PASSWORD und Benutzerrechte."
                 )
@@ -795,12 +837,12 @@ def main():
         connected = True
     except Exception as err:
         connected = False
-        message = str(err)
-        st.error(
-            "Datenbank nicht erreichbar. Prüfe, ob MySQL läuft und die Umgebungsvariablen korrekt gesetzt sind."
+        show_error(
+            "CONN-002",
+            "Datenbank nicht erreichbar. Prüfe, ob MySQL läuft und die Umgebungsvariablen korrekt gesetzt sind.",
+            err,
         )
-        st.error(message)
-        if "1044" in message or "1045" in message or "Access denied" in message:
+        if "1044" in str(err) or "1045" in str(err) or "Access denied" in str(err):
             st.error(
                 "Der angegebene MySQL-Benutzer hat keine ausreichenden Rechte. "
                 "Verwende einen Benutzer mit Zugriff auf die Datenbank oder korrigiere die Rechte."
@@ -815,7 +857,7 @@ def main():
                     initialize_schema()
                     st.success("Datenbank-Schema wurde erstellt. Bitte Seite neu laden.")
                 except Exception as err:
-                    st.error(f"Schema-Initialisierung fehlgeschlagen: {err}")
+                    show_error("SCHEMA-001", "Schema-Initialisierung fehlgeschlagen.", err)
             database_help()
             return
 
@@ -823,7 +865,7 @@ def main():
             if seed_sample_data_if_empty():
                 st.toast("Beispieldaten wurden angelegt.", icon="✅")
         except Exception as err:
-            st.warning(f"Beispieldaten konnten nicht angelegt werden: {err}")
+            show_error("SEED-001", "Beispieldaten konnten nicht angelegt werden.", err, display=st.warning)
 
         tabs = st.tabs(["Übersicht", "Bücher", "Personen", "Ausleihen", "Einstellungen"])
 
