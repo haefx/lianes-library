@@ -24,12 +24,16 @@ dafür lässt sich jeder Teil noch gut nachvollziehen.
 - **Einstellungen** – Verbindungsstatus zur Datenbank prüfen und das Schema
   bei Bedarf neu initialisieren
 
+## Screenshots
+
+| Dashboard | Bücherverwaltung |
+|---|---|
+| ![Dashboard-Übersicht](docs/screenshots/dashboard.png) | ![Bücher verwalten](docs/screenshots/buecher.png) |
+
 ## Projektstruktur
 
 - `environment.yml`: lokale Conda-Umgebung
-- `requirements.txt`: gemeinsame Python-Abhängigkeiten für Conda und Docker
-- `docker-compose.yml`: lokale MySQL-Datenbank und optional der komplette Stack
-- `Dockerfile`: Production-Laufzeit für Coolify
+- `requirements.txt`: Python-Abhängigkeiten für die Conda-Umgebung
 - `sql/import.sql`: Datenbankschema und Views
 - `sql/testdata.sql`: Beispieldaten für lokale Tests
 - `web/app.py`: Streamlit-Anwendung
@@ -37,6 +41,7 @@ dafür lässt sich jeder Teil noch gut nachvollziehen.
 - `python/create_schema.py`: Hilfsskript, um das Schema manuell neu anzulegen
 - `python/*.ipynb`: Notebooks, in denen ich einzelne SQL-Abfragen und
   Pandas-Auswertungen ausprobiert habe, bevor sie in `db.py` gewandert sind
+- `docs/screenshots/`: Screenshots der Anwendung für diese README
 
 ## Datenmodell
 
@@ -56,49 +61,55 @@ Bücher und Personen werden nie gelöscht, sondern über `is_active`
 deaktiviert – so bleibt die Ausleihhistorie auch nach einer "Löschung"
 nachvollziehbar.
 
-## Lokal mit Conda üben
+## Lokal einrichten
 
-### 1. Conda-Umgebung erstellen
+### 1. MySQL bereitstellen
+
+Eine lokal installierte MySQL-Instanz (z. B. über den offiziellen MySQL
+Community Server) reicht aus. Schema und Beispieldaten lassen sich bequem
+über MySQL Workbench einspielen:
+
+1. Mit dem `root`-Benutzer verbinden.
+2. `sql/import.sql` als Skript öffnen und komplett ausführen – legt die
+   Datenbank `lianes_library` mit allen Tabellen und Views an.
+3. `sql/testdata.sql` genauso ausführen, um Beispieldaten zu laden.
+4. Einen eigenen Anwendungsnutzer anlegen, mit dem die App später auf die
+   Datenbank zugreift:
+
+   ```sql
+   CREATE USER IF NOT EXISTS 'library_user'@'localhost' IDENTIFIED BY 'library_password';
+   GRANT ALL PRIVILEGES ON lianes_library.* TO 'library_user'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+
+Diese Zugangsdaten entsprechen genau den Standardwerten in `python/db.py`
+(`MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`,
+`MYSQL_DATABASE` als Umgebungsvariablen, sonst `localhost` / `3306` /
+`library_user` / `library_password` / `lianes_library`).
+
+### 2. Conda-Umgebung erstellen
 
 Öffne Anaconda Prompt, Miniconda Prompt oder ein Terminal mit verfügbarem
 `conda` im Projektverzeichnis:
 
 ```bash
 conda env create --file environment.yml
-conda activate lianeslib
+conda activate lianes-lib-env
 ```
 
 Die Umgebung verwendet Python 3.12 und installiert die Pakete aus
 `requirements.txt`. `ipykernel` ist zusätzlich enthalten, damit die Umgebung
 auch in Jupyter und VS Code als Kernel ausgewählt werden kann.
 
-### 2. Nur MySQL mit Docker starten
-
-Die Python-Anwendung läuft in Conda. Docker stellt lokal lediglich die
-MySQL-Datenbank bereit:
-
-```bash
-docker compose up -d db
-```
-
-Die Standardwerte in `python/db.py` passen zur lokalen Datenbank aus
-`docker-compose.yml`:
-
-```text
-Host: localhost
-Port: 3306
-Datenbank: lianes_library
-Benutzer: library_user
-Passwort: library_password
-```
-
-### 3. Streamlit aus Conda starten
+### 3. Streamlit starten
 
 ```bash
 streamlit run web/app.py
 ```
 
 Die Anwendung ist anschließend unter `http://localhost:8501` erreichbar.
+Falls das Schema noch fehlt, bietet die App unter "Einstellungen" auch einen
+Button zum Initialisieren an.
 
 ### 4. Umgebung später aktualisieren
 
@@ -108,52 +119,11 @@ Nach Änderungen an `environment.yml` oder `requirements.txt`:
 conda env update --file environment.yml --prune
 ```
 
-### 5. Lokale Dienste beenden
+### 5. Umgebung beenden
 
 ```bash
-docker compose stop db
 conda deactivate
 ```
-
-`docker compose stop db` erhält die Daten im Docker-Volume. Mit
-`docker compose down` werden die Container entfernt, das benannte Daten-Volume
-bleibt jedoch ebenfalls bestehen. `docker compose down --volumes` würde auch
-die lokale Datenbank löschen.
-
-## Optional: komplett lokal mit Docker
-
-Die bisherige Variante funktioniert weiterhin unverändert:
-
-```bash
-docker compose up --build
-```
-
-Dabei laufen Streamlit und MySQL jeweils in einem Container.
-
-## Production mit Coolify
-
-Das Production-Deployment bleibt Docker-basiert. Coolify baut den vorhandenen
-`Dockerfile`; Conda und `environment.yml` werden dafür nicht benötigt.
-
-In Coolify müssen folgende Umgebungsvariablen gesetzt sein:
-
-- `MYSQL_HOST`
-- `MYSQL_PORT`
-- `MYSQL_USER`
-- `MYSQL_PASSWORD`
-- `MYSQL_DATABASE`
-
-Falls zusätzlich `MYSQL_URL` gesetzt wird, muss die URL dieselbe Datenbank wie
-`MYSQL_DATABASE` enthalten. Zugangsdaten gehören ausschließlich in Coolify oder
-eine lokale, von Git ignorierte `.env`-Datei.
-
-## Conda und Docker in diesem Projekt
-
-| Umgebung | Python/Streamlit | MySQL | Zweck |
-|---|---|---|---|
-| Lokal mit Conda | Conda | Docker | Lernen, Debugging, Notebooks |
-| Lokal komplett mit Docker | Docker | Docker | Production-nahe Tests |
-| Coolify | Docker | Coolify/MySQL | Production |
 
 ## Was ich dabei gelernt habe / offene Punkte
 

@@ -161,10 +161,13 @@ CREATE TABLE IF NOT EXISTS loans
     CONSTRAINT pk_loans
         PRIMARY KEY (loan_id),
 
+    -- ON UPDATE CASCADE ist hier nicht möglich: book_id ist Basis der
+    -- berechneten Spalte open_loan_book_id, und MySQL erlaubt für
+    -- Fremdschlüssel auf solchen Basisspalten nur RESTRICT/NO ACTION.
     CONSTRAINT fk_loans_book
         FOREIGN KEY (book_id)
         REFERENCES books (book_id)
-        ON UPDATE CASCADE
+        ON UPDATE RESTRICT
         ON DELETE RESTRICT,
 
     CONSTRAINT fk_loans_borrower

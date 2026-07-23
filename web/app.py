@@ -449,7 +449,7 @@ def book_management():
                         ),
                     )
                     st.success("Buch wurde hinzugefügt.")
-                    st.experimental_rerun()
+                    st.rerun()
 
     books = load_books(active_only=False)
     if books.empty:
@@ -503,7 +503,7 @@ def book_management():
                     ),
                 )
                 st.success("Buchdaten wurden aktualisiert.")
-                st.experimental_rerun()
+                st.rerun()
 
             if delete:
                 execute_statement(
@@ -511,7 +511,7 @@ def book_management():
                     params=(selection,),
                 )
                 st.success("Buch wurde inaktiv gesetzt.")
-                st.experimental_rerun()
+                st.rerun()
 
 
 def borrower_management():
@@ -552,7 +552,7 @@ def borrower_management():
                         ),
                     )
                     st.success("Person wurde hinzugefügt.")
-                    st.experimental_rerun()
+                    st.rerun()
 
     borrowers = load_borrowers(active_only=False)
     if borrowers.empty:
@@ -603,7 +603,7 @@ def borrower_management():
                     ),
                 )
                 st.success("Personendaten wurden aktualisiert.")
-                st.experimental_rerun()
+                st.rerun()
 
             if deactivate:
                 execute_statement(
@@ -611,7 +611,7 @@ def borrower_management():
                     params=(selection,),
                 )
                 st.success("Person wurde inaktiv gesetzt.")
-                st.experimental_rerun()
+                st.rerun()
 
 
 def loan_management():
@@ -670,7 +670,7 @@ def loan_management():
                         ),
                     )
                     st.success("Ausleihe wurde angelegt.")
-                    st.experimental_rerun()
+                    st.rerun()
 
     with st.expander("Offene Ausleihen verwalten"):
         open_loans = load_open_loans()
@@ -692,11 +692,11 @@ def loan_management():
                     params=(loan_choice,),
                 )
                 st.success("Ausleihe wurde als zurückgegeben markiert.")
-                st.experimental_rerun()
+                st.rerun()
 
 
 def database_help():
-    st.header("Datenbank & Deployment")
+    st.header("Datenbank")
     st.markdown(
         """
         **Verbindung**
@@ -709,16 +709,19 @@ def database_help():
         - `MYSQL_PASSWORD`
         - `MYSQL_DATABASE`
 
-        Für Coolify kannst du diese Werte in den Umgebungsvariablen der App setzen.
+        Ohne gesetzte Umgebungsvariablen greift die App auf `localhost:3306`,
+        Benutzer `library_user` und Datenbank `lianes_library` zurück.
         """
     )
 
-    st.subheader("Lokale Entwicklung")
+    st.subheader("Lokale Einrichtung")
     st.markdown(
         """
-        - Starte `docker-compose up --build` im Projektverzeichnis.
-        - Die Datenbank wird automatisch mit `sql/import.sql` initialisiert.
-        - `http://localhost:8501` öffnet die App.
+        - `sql/import.sql` in MySQL Workbench (oder einem anderen SQL-Client)
+          gegen deine lokale MySQL-Instanz ausführen.
+        - Optional `sql/testdata.sql` für Beispieldaten ausführen.
+        - `http://localhost:8501` öffnet die App, sobald `streamlit run web/app.py`
+          in der aktivierten Conda-Umgebung läuft.
         """
     )
 

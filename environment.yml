@@ -1,4 +1,4 @@
-name: lianeslib
+name: lianes-lib-env
 
 channels:
   - conda-forge
